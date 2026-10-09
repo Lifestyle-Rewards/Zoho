@@ -3,7 +3,7 @@ package invoice
 import (
 	"fmt"
 
-	zoho "github.com/iapon/zoho"
+	zoho "github.com/Lifestyle-Rewards/zoho"
 )
 
 // https://www.zoho.com/invoice/api/v3/#Contact_Persons_Create_a_contact_person
@@ -58,7 +58,6 @@ type CreateContactPersonRequest struct {
 	Department   string `json:"department,omitempty"`
 	EnablePortal bool   `json:"enable_portal"`
 }
-
 
 type CreateContactPersonResponse struct {
 	Code          int    `json:"code"`

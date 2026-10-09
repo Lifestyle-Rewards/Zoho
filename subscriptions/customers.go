@@ -3,7 +3,7 @@ package subscriptions
 import (
 	"fmt"
 
-	zoho "github.com/iapon/zoho"
+	zoho "github.com/Lifestyle-Rewards/zoho"
 )
 
 // GetCustomer will return customer specified by id

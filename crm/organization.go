@@ -2,7 +2,8 @@ package crm
 
 import (
 	"fmt"
-	zoho "github.com/iapon/zoho"
+
+	zoho "github.com/Lifestyle-Rewards/zoho"
 )
 
 // GetOrganization will return the organization data related to the logged in account

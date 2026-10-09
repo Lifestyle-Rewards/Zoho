@@ -2,8 +2,9 @@ package crm
 
 import (
 	"fmt"
-	zoho "github.com/iapon/zoho"
 	"time"
+
+	zoho "github.com/Lifestyle-Rewards/zoho"
 )
 
 // ListRecords will return a list of the records provided in the request field, and specified by the module
@@ -65,7 +66,7 @@ func (c *API) InsertRecords(request InsertRecordsData, module Module) (data Inse
 	return InsertRecordsResponse{}, fmt.Errorf("Data returned was nil")
 }
 
-//UpdateRecordsResponseData is the data provided to UpdateRecords
+// UpdateRecordsResponseData is the data provided to UpdateRecords
 type UpdateRecordsResponseData struct {
 	Message string `json:"message,omitempty"`
 	Details struct {
@@ -112,10 +113,11 @@ type InsertRecordsResponse struct {
 // if you want to empty the fields contents you will need to embed the records type in a struct in your own package,
 // and override the field with a field that has a json tag that does not contain 'omitempty'.
 // eg.
-//    type struct Account {
-//        crm.Account
-//        CustomField string `json:"Custom_Field"`
-//     }
+//
+//	type struct Account {
+//	    crm.Account
+//	    CustomField string `json:"Custom_Field"`
+//	 }
 func (c *API) UpdateRecords(request UpdateRecordsData, module Module) (data UpdateRecordsResponse, err error) {
 	endpoint := zoho.Endpoint{
 		Name:         "records",
@@ -152,10 +154,11 @@ type UpdateRecordsResponse struct {
 // if you want to empty the fields contents in zoho you will need to embed the records type in a struct in your own package,
 // and override the field with a field that has a json tag that does not contain 'omitempty'.
 // eg.
-//    type struct Account {
-//        crm.Account
-//        CustomField string `json:"Custom_Field"`
-//     }
+//
+//	type struct Account {
+//	    crm.Account
+//	    CustomField string `json:"Custom_Field"`
+//	 }
 func (c *API) UpsertRecords(request UpsertRecordsData, module Module, duplicateFieldsCheck []string) (data UpsertRecordsResponse, err error) {
 	endpoint := zoho.Endpoint{
 		Name:         "records",

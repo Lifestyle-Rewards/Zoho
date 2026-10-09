@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"log"
 
-	zoho "github.com/iapon/zoho"
+	zoho "github.com/Lifestyle-Rewards/zoho"
 	"github.com/kr/pretty"
 )
 
-//https://www.zoho.com/invoice/api/v3/#Invoices_Create_an_invoice
-//func (c *API) CreateInvoice(request interface{}, OrganizationID string, params map[string]zoho.Parameter) (data ListContactsResponse, err error) {
+// https://www.zoho.com/invoice/api/v3/#Invoices_Create_an_invoice
+// func (c *API) CreateInvoice(request interface{}, OrganizationID string, params map[string]zoho.Parameter) (data ListContactsResponse, err error) {
 func (c *API) CreateInvoice(request interface{}, pars map[string]zoho.Parameter, mark bool) (data CreateInvoiceResponse, err error) {
 
 	endpoint := zoho.Endpoint{

@@ -3,7 +3,7 @@ package invoice
 import (
 	"fmt"
 
-	zoho "github.com/iapon/zoho"
+	zoho "github.com/Lifestyle-Rewards/zoho"
 )
 
 // https://www.zoho.com/invoice/api/v3/#Recurring_Invoices_List_Recurring_Invoice

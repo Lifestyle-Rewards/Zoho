@@ -3,8 +3,9 @@
 package expense
 
 import (
-	zoho "github.com/iapon/zoho"
 	"math/rand"
+
+	zoho "github.com/Lifestyle-Rewards/zoho"
 )
 
 // Change here only if these values changes over time

@@ -3,7 +3,7 @@ package subscriptions
 import (
 	"math/rand"
 
-	zoho "github.com/iapon/zoho"
+	zoho "github.com/Lifestyle-Rewards/zoho"
 )
 
 const ZohoSubscriptionsEndpointHeader = "X-com-zoho-subscriptions-organizationid"

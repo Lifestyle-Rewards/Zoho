@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	zoho "github.com/iapon/zoho"
+	zoho "github.com/Lifestyle-Rewards/zoho"
 )
 
 type InvoiceStatus string

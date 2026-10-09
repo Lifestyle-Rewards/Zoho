@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"net/url"
 
-	zoho "github.com/iapon/zoho"
+	zoho "github.com/Lifestyle-Rewards/zoho"
 )
 
 func (c *API) AttachInvoiceFile(request interface{}, invoiceId string, file []byte, filename string) (data EmailInvoiceResponse, err error) {

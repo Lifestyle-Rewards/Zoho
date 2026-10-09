@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	zoho "github.com/iapon/zoho"
+	zoho "github.com/Lifestyle-Rewards/zoho"
 	"github.com/kr/pretty"
 )
 

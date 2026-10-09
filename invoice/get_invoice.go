@@ -7,11 +7,11 @@ import (
 	"net/http"
 	"net/url"
 
-	zoho "github.com/iapon/zoho"
+	zoho "github.com/Lifestyle-Rewards/zoho"
 )
 
-//https://www.zoho.com/invoice/api/v3/#Invoices_Get_an_invoice
-//func (c *API) GetInvoice(request interface{}, OrganizationID string, params map[string]zoho.Parameter) (data GetInvoiceResponse, err error) {
+// https://www.zoho.com/invoice/api/v3/#Invoices_Get_an_invoice
+// func (c *API) GetInvoice(request interface{}, OrganizationID string, params map[string]zoho.Parameter) (data GetInvoiceResponse, err error) {
 func (c *API) GetInvoice(invoiceId string) (data GetInvoiceResponse, err error) {
 	endpoint := zoho.Endpoint{
 		Name:         InvoicesModule,

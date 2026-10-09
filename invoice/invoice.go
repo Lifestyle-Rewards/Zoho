@@ -3,7 +3,7 @@ package invoice
 import (
 	"math/rand"
 
-	zoho "github.com/iapon/zoho"
+	zoho "github.com/Lifestyle-Rewards/zoho"
 )
 
 const (

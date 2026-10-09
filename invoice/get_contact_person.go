@@ -3,7 +3,7 @@ package invoice
 import (
 	"fmt"
 
-	zoho "github.com/iapon/zoho"
+	zoho "github.com/Lifestyle-Rewards/zoho"
 )
 
 // https://www.zohoapis.com/invoice/v3/contacts/460000000026049/contactpersons/460000000026051 \

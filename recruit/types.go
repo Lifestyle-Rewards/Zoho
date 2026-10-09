@@ -3,7 +3,7 @@ package recruit
 import (
 	"encoding/json"
 
-	zoho "github.com/iapon/zoho"
+	zoho "github.com/Lifestyle-Rewards/zoho"
 )
 
 type Error struct {
