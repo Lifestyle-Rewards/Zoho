@@ -27,6 +27,7 @@ func New() *Zoho {
 		client:     retryClient.StandardClient(),
 		ZohoTLD:    "com",
 		tokensFile: "./.tokens.zoho",
+		s3Storage:  nil,
 		oauth: OAuth{
 			baseURL: "https://accounts.zoho.com/oauth/v2/",
 		},
@@ -48,6 +49,10 @@ func (z *Zoho) GetOauthToken() string {
 // by default tokens are stored in a file in the current directory called '.tokens.zoho'
 func (z *Zoho) SetTokensFile(s string) {
 	z.tokensFile = s
+}
+
+func (z *Zoho) SetS3Storage(ts *S3Storage) {
+	z.s3Storage = ts
 }
 
 // SetZohoTLD can be used to set the TLD extension for API calls for example for Zoho in EU and China.
@@ -80,6 +85,7 @@ type Zoho struct {
 	client         *http.Client
 	tokenManager   TokenLoaderSaver
 	tokensFile     string
+	s3Storage      *S3Storage
 	OrganizationID string
 
 	ZohoTLD string
@@ -93,4 +99,12 @@ type OAuth struct {
 	redirectURI  string
 	token        AccessTokenResponse
 	baseURL      string
+}
+
+type S3Storage struct {
+	Endpoint  string
+	Bucket    string
+	Region    string
+	AccessKey string
+	SecretKey string
 }

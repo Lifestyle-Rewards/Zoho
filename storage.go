@@ -1,6 +1,8 @@
 package zoho
 
 import (
+	"bytes"
+	"context"
 	"encoding/gob"
 	"errors"
 	"fmt"
@@ -8,6 +10,10 @@ import (
 	"os"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/datastore"
 )
@@ -25,6 +31,36 @@ type TokenLoaderSaver interface {
 func (z Zoho) SaveTokens(t AccessTokenResponse) error {
 	if z.tokenManager != nil {
 		return z.tokenManager.SaveTokens(t)
+	}
+
+	if z.s3Storage != nil {
+		client, err := newS3Client(z.s3Storage)
+		if err != nil {
+			return err
+		}
+		b := bytes.NewBuffer(nil)
+		enc := gob.NewEncoder(b)
+
+		v := TokenWrapper{
+			Token: z.oauth.token,
+		}
+		v.SetExpiry()
+
+		err = enc.Encode(v)
+		if err != nil {
+			return fmt.Errorf("Failed to encode tokens to S3 file '%s': %s", z.tokensFile, err)
+		}
+
+		path := "/zoho/" + z.tokensFile
+		_, err = client.PutObject(context.Background(), &s3.PutObjectInput{
+			Bucket: aws.String(z.s3Storage.Bucket),
+			Key:    aws.String(path),
+			Body:   bytes.NewReader(b.Bytes()),
+		})
+		if err != nil {
+			return err
+		}
+		return nil
 	}
 
 	// Save the token response as GOB to file
@@ -55,6 +91,29 @@ func (z Zoho) LoadAccessAndRefreshToken() (AccessTokenResponse, error) {
 	}
 
 	// Load the GOB and decode to AccessToken
+	if z.s3Storage != nil {
+		client, err := newS3Client(z.s3Storage)
+		if err != nil {
+			return AccessTokenResponse{}, err
+		}
+		path := "/zoho/" + z.tokensFile
+		o, err := client.GetObject(context.Background(), &s3.GetObjectInput{
+			Bucket: aws.String(z.s3Storage.Bucket),
+			Key:    aws.String(path),
+		})
+		if err != nil {
+			return AccessTokenResponse{}, fmt.Errorf("Failed to read token from S3 file '%s': %s", z.tokensFile, err)
+		}
+		defer o.Body.Close()
+		dec := gob.NewDecoder(o.Body)
+		var v TokenWrapper
+		err = dec.Decode(&v)
+		if err != nil {
+			return AccessTokenResponse{}, fmt.Errorf("Failed to decode tokens from S3 file '%s': %s", z.tokensFile, err)
+		}
+		return v.Token, nil
+	}
+
 	file, err := os.OpenFile(z.tokensFile, os.O_RDONLY|os.O_CREATE, 0666)
 	if err != nil {
 		return AccessTokenResponse{}, fmt.Errorf("Failed to open file '%s': %s", z.tokensFile, err)
@@ -174,4 +233,20 @@ func (d DatastoreManager) SaveTokens(t AccessTokenResponse) error {
 	}
 
 	return nil
+}
+
+func newS3Client(s *S3Storage) (*s3.Client, error) {
+	creds := credentials.NewStaticCredentialsProvider(s.AccessKey, s.SecretKey, "")
+	_, err := creds.Retrieve(context.TODO())
+	if err != nil {
+		return nil, fmt.Errorf("there is something wrong with your S3 credentials: %v", err.Error())
+	}
+	awscfg, err := config.LoadDefaultConfig(context.TODO(), config.WithCredentialsProvider(creds), config.WithRegion(s.Region))
+	if err != nil {
+		return nil, fmt.Errorf("cannot make credentials, reason %s", err.Error())
+	}
+
+	return s3.NewFromConfig(awscfg, func(o *s3.Options) {
+		o.BaseEndpoint = aws.String(s.Endpoint)
+	}), nil
 }
